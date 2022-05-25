@@ -1,12 +1,17 @@
 module.exports = mongoose => {
-    const Data = mongoose.model(
-      "data",
-      mongoose.Schema(
-        {
-          name: String,
-        },
-        { timestamps: true }
-      )
-    );
-    return Data;
-  };
+  var schema = mongoose.Schema(
+    {
+      title: String,
+      description: String,
+      published: Boolean
+    },
+    { timestamps: true }
+  );
+  schema.method("toJSON", function() {
+    const { __v, _id, ...object } = this.toObject();
+    object.id = _id;
+    return object;
+  });
+  const Data = mongoose.model("Data", schema);
+  return Data;
+};
